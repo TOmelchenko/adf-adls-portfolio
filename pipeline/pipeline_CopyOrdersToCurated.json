@@ -1,0 +1,78 @@
+{
+    "name": "pl_copy_orders_to_curated",
+    "properties": {
+        "activities": [
+            {
+                "name": "Check source file exists",
+                "type": "GetMetadata",
+                "typeProperties": {
+                    "dataset": {
+                        "referenceName": "ds_raw_orders_csv",
+                        "type": "DatasetReference"
+                    },
+                    "fieldList": ["exists"],
+                    "storeSettings": {
+                        "type": "AzureBlobFSReadSettings",
+                        "enablePartitionDiscovery": false
+                    },
+                    "formatSettings": {
+                        "type": "DelimitedTextReadSettings"
+                    }
+                }
+            },
+            {
+                "name": "If source file exists",
+                "type": "IfCondition",
+                "dependsOn": [
+                    {
+                        "activity": "Check source file exists",
+                        "dependencyConditions": ["Succeeded"]
+                    }
+                ],
+                "typeProperties": {
+                    "expression": {
+                        "value": "@activity('Check source file exists').output.exists",
+                        "type": "Expression"
+                    },
+                    "ifTrueActivities": [
+                        {
+                            "name": "Copy CSV to curated Parquet",
+                            "type": "Copy",
+                            "typeProperties": {
+                                "source": {
+                                    "type": "DelimitedTextSource",
+                                    "storeSettings": {
+                                        "type": "AzureBlobFSReadSettings"
+                                    },
+                                    "formatSettings": {
+                                        "type": "DelimitedTextReadSettings"
+                                    }
+                                },
+                                "sink": {
+                                    "type": "ParquetSink",
+                                    "storeSettings": {
+                                        "type": "AzureBlobFSWriteSettings"
+                                    }
+                                },
+                                "enableStaging": false
+                            },
+                            "inputs": [
+                                {
+                                    "referenceName": "ds_raw_orders_csv",
+                                    "type": "DatasetReference"
+                                }
+                            ],
+                            "outputs": [
+                                {
+                                    "referenceName": "ds_curated_orders_parquet",
+                                    "type": "DatasetReference"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ],
+        "annotations": []
+    }
+}

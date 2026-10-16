@@ -1,0 +1,19 @@
+{
+    "name": "ds_curated_orders_parquet",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "ls_adls_gen2",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "Parquet",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobFSLocation",
+                "fileSystem": "curated",
+                "folderPath": "orders"
+            }
+        },
+        "schema": []
+    }
+}
