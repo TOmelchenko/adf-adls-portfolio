@@ -43,7 +43,7 @@ adf-adls-portfolio/
     └── pipeline_CopyOrdersToCurated.json
 ```
 
-The `pipeline/*.json` files are reference definitions for each ADF resource — a starting point you can paste into each resource's **Code** view in ADF Studio, or compare against what you build by hand. After building the real pipeline in the Studio, re-export its JSON and overwrite these so the repo matches what's actually deployed.
+The `pipeline/*.json` files are exported from the deployed ADF pipeline.
 
 ## Setup (Azure Portal)
 
