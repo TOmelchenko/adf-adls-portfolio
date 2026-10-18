@@ -35,7 +35,9 @@ flowchart LR
 adf-adls-portfolio/
 ├── data/
 │   ├── generate_sample_data.py   # regenerates the sample CSV (stdlib only)
-│   └── sample/orders_sample.csv  # 200-row synthetic orders file, ready to upload
+│   └── sample/
+│       ├── orders_sample.csv     # 200-row synthetic orders file, ready to upload
+│       └── orders_sample.parquet # actual pipeline output, downloaded from curated/orders/
 └── pipeline/
     ├── linkedService_ADLSGen2.json
     ├── dataset_RawOrdersCsv.json
@@ -65,7 +67,15 @@ The `pipeline/*.json` files are reference definitions for each ADF resource — 
 
 ## Results
 
-_Fill in after running: pipeline run duration, row count in the Parquet output, a screenshot of the Monitor "Succeeded" run, a screenshot of the `curated/` container._
+Pipeline run succeeded end-to-end (all three activities green in Monitor):
+
+| Activity | Status | Duration |
+|---|---|---|
+| Check source file exists (GetMetadata) | Succeeded | 10s |
+| If source file exists (IfCondition) | Succeeded | 25s |
+| Copy CSV to curated Parquet (Copy) | Succeeded | 23s |
+
+Output: a single Parquet file (6.6 KiB, converted from the 200-row/~9 KB source CSV) landed in `curated/orders/` in Storage Browser, confirming the managed-identity-authenticated read from `raw/` and write to `curated/` both worked with no keys or secrets involved.
 
 ## Cleanup
 

@@ -5,12 +5,23 @@
             {
                 "name": "Check source file exists",
                 "type": "GetMetadata",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
                 "typeProperties": {
                     "dataset": {
                         "referenceName": "ds_raw_orders_csv",
                         "type": "DatasetReference"
                     },
-                    "fieldList": ["exists"],
+                    "fieldList": [
+                        "exists"
+                    ],
                     "storeSettings": {
                         "type": "AzureBlobFSReadSettings",
                         "enablePartitionDiscovery": false
@@ -26,9 +37,12 @@
                 "dependsOn": [
                     {
                         "activity": "Check source file exists",
-                        "dependencyConditions": ["Succeeded"]
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
                     }
                 ],
+                "userProperties": [],
                 "typeProperties": {
                     "expression": {
                         "value": "@activity('Check source file exists').output.exists",
@@ -38,11 +52,22 @@
                         {
                             "name": "Copy CSV to curated Parquet",
                             "type": "Copy",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
                             "typeProperties": {
                                 "source": {
                                     "type": "DelimitedTextSource",
                                     "storeSettings": {
-                                        "type": "AzureBlobFSReadSettings"
+                                        "type": "AzureBlobFSReadSettings",
+                                        "recursive": true,
+                                        "enablePartitionDiscovery": false
                                     },
                                     "formatSettings": {
                                         "type": "DelimitedTextReadSettings"
@@ -52,9 +77,20 @@
                                     "type": "ParquetSink",
                                     "storeSettings": {
                                         "type": "AzureBlobFSWriteSettings"
+                                    },
+                                    "formatSettings": {
+                                        "type": "ParquetWriteSettings"
                                     }
                                 },
-                                "enableStaging": false
+                                "enableStaging": false,
+                                "translator": {
+                                    "type": "TabularTranslator",
+                                    "typeConversion": true,
+                                    "typeConversionSettings": {
+                                        "allowDataTruncation": true,
+                                        "treatBooleanAsNumber": false
+                                    }
+                                }
                             },
                             "inputs": [
                                 {

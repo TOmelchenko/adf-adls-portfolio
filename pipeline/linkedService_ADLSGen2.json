@@ -1,5 +1,5 @@
 {
-    "name": "ls_adls_gen2",
+    "name": "AzureDataLakeStorage1",
     "properties": {
         "type": "AzureBlobFS",
         "typeProperties": {
