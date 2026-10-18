@@ -2,8 +2,6 @@
 
 A small, self-contained data engineering project built on a free Azure account: a synthetic CSV lands in **Azure Data Lake Storage Gen2**, and an **Azure Data Factory** pipeline validates and converts it to **Parquet**, authenticating with the Data Factory's own managed identity — no stored keys or secrets anywhere.
 
-Built to demonstrate hands-on ADF + ADLS Gen2 skills (job req: logistics/supply-chain data engineering).
-
 ## Architecture
 
 ```mermaid
@@ -81,14 +79,12 @@ Output: a single Parquet file (6.6 KiB, converted from the 200-row/~9 KB source 
 
 This is a free-tier account — **delete the resource group** (`rg-adf-portfolio`) once you're done demoing or recording, to make sure nothing keeps billing.
 
-## Skills demonstrated (vs. the job posting)
+## What this project covers
 
-| JD requirement | How this project shows it |
-|---|---|
-| Azure Data Factory | Built a multi-activity pipeline (GetMetadata, IfCondition, Copy), not just a bare copy job |
-| Azure Data Lake Storage Gen2 | Hierarchical-namespace storage account with a raw/curated zone split |
-| Parquet | Pipeline's sink format is Parquet, converted from CSV |
-| Security / access management | Managed-identity auth end-to-end — no keys, no secrets in config |
-| Pipeline reliability | Explicit file-existence check before attempting the copy |
+- **Azure Data Factory** — a multi-activity pipeline (GetMetadata, IfCondition, Copy), not just a bare copy job.
+- **Azure Data Lake Storage Gen2** — a hierarchical-namespace storage account with a raw/curated zone split.
+- **Parquet** — the pipeline's sink format, converted from CSV.
+- **Security / access management** — managed-identity auth end-to-end, no keys or secrets in config.
+- **Pipeline reliability** — an explicit file-existence check before attempting the copy.
 
 **Would extend with, given more scope**: a Synapse serverless SQL pool or Spark pool for querying/transforming the curated Parquet data (PySpark), CI/CD for the pipeline definitions via GitHub Actions + the ADF `npm` validate/publish tooling, and Bicep/ARM templates so the whole environment is provisioned from code rather than clicked through the Portal.
